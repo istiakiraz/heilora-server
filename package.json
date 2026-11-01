@@ -12,7 +12,7 @@
     "generate": "prisma generate",
     "studio": "prisma studio",
     "push": "prisma db push",
-    "pull" : "prisma db pull",
+    "pull": "prisma db pull",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.6",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
     "eslint": "^10.13.0",
     "prisma": "^7.10.1",
