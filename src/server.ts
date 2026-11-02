@@ -1,10 +1,11 @@
 import app from "./app";
+import { envVars } from "./config/env";
 
 const bootstrap = () => {
   try {
-    app.listen(5000, () => {
+    app.listen(parseInt(envVars.PORT), () => {
       console.log(
-        `Heilora server is running on http://localhost:5000`,
+        `Heilora server is running on http://localhost:${envVars.PORT}`,
       );
     });
   } catch (error) {
