@@ -33,12 +33,11 @@
 //   loginUser
 // };
 
-
-
 import { Request, Response } from "express";
 import { catchAsync } from "../../shared/catchAsync";
 import { AuthService } from "./auth.service";
 import { sendResponse } from "../../shared/sendResponse";
+import status from "http-status";
 
 const setAuthCookies = (res: Response, headers: Headers) => {
   const cookies = headers.getSetCookie();
@@ -48,12 +47,14 @@ const setAuthCookies = (res: Response, headers: Headers) => {
 };
 
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
-  const { headers, data, patient } = await AuthService.registerPatient(req.body);
+  const { headers, data, patient } = await AuthService.registerPatient(
+    req.body,
+  );
 
   setAuthCookies(res, headers);
 
   sendResponse(res, {
-    statusCode: 201,
+    statusCode: status.CREATED,
     success: true,
     message: "Patient registered successfully",
     data: { ...data, patient },
@@ -66,7 +67,7 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   setAuthCookies(res, headers);
 
   sendResponse(res, {
-    statusCode: 200,
+    statusCode: status.OK,
     success: true,
     message: "User logged in successfully",
     data,

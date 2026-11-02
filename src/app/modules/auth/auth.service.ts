@@ -77,19 +77,28 @@ const registerPatient = async (payload: {
     throw new Error("User registration failed");
   }
 
-  const patient = await prisma.$transaction(async (tx) => {
-    const patientTx = await tx.patient.create({
-      data: {
-        userId: response.user.id,
-        name: payload.name,
-        email: payload.email,
+  try {
+    const patient = await prisma.$transaction(async (tx) => {
+      const patientTx = await tx.patient.create({
+        data: {
+          userId: response.user.id,
+          name: payload.name,
+          email: payload.email,
+        },
+      });
+
+      return patientTx;
+    });
+    return { headers, data: response, patient };
+  } catch (error) {
+    console.log("Transaction error :", error);
+    await prisma.user.delete({
+      where: {
+        id: response.user.id,
       },
     });
-
-    return patientTx;
-  });
-
-  return { headers, data: response, patient };
+    throw error;
+  }
 };
 
 const loginUser = async (payload: { email: string; password: string }) => {
