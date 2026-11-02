@@ -56,9 +56,8 @@
 //   loginUser,
 // };
 
-
-
 import { auth } from "../../lib/auth";
+import { prisma } from "../../lib/prisma";
 
 const registerPatient = async (payload: {
   name: string;
@@ -74,7 +73,23 @@ const registerPatient = async (payload: {
     returnHeaders: true,
   });
 
-  return { headers, data: response };
+  if (!response.user) {
+    throw new Error("User registration failed");
+  }
+
+  const patient = await prisma.$transaction(async (tx) => {
+    const patientTx = await tx.patient.create({
+      data: {
+        userId: response.user.id,
+        name: payload.name,
+        email: payload.email,
+      },
+    });
+
+    return patientTx;
+  });
+
+  return { headers, data: response, patient };
 };
 
 const loginUser = async (payload: { email: string; password: string }) => {
