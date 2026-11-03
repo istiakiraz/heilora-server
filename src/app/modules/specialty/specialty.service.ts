@@ -25,6 +25,16 @@ const updateSpecialty = async (
   id: string,
   payload: Specialty,
 ): Promise<Specialty> => {
+  const isSpecialtyExist = await prisma.specialty.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!isSpecialtyExist) {
+    throw new Error("Specialty not found");
+  }
+
   const result = await prisma.specialty.update({
     where: {
       id,
