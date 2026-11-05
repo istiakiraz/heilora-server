@@ -46,6 +46,8 @@ const setAuthCookies = (res: Response, headers: Headers) => {
   }
 };
 
+// register user
+
 const registerPatient = catchAsync(async (req: Request, res: Response) => {
   const { headers, data, patient } = await AuthService.registerPatient(
     req.body,
@@ -60,6 +62,8 @@ const registerPatient = catchAsync(async (req: Request, res: Response) => {
     data: { ...data, patient },
   });
 });
+
+// log in
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
   const { headers, data } = await AuthService.loginUser(req.body);
