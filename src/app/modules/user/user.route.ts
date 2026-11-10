@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Router } from "express";
 import { UserController } from "./user.controller";
 import z from "zod";
 import { Gender } from "../../../generated/prisma/enums";
+import { validateRequest } from "../../middleware/validateRequest";
 
 const router = Router();
 
@@ -69,18 +70,7 @@ export const createDoctorZodSchema = z.object({
 
 router.post(
   "/create-doctor",
-  (req: Request, res: Response, next: NextFunction) => {
-    const parsedResult = createDoctorZodSchema.safeParse(req.body);
-
-    if (!parsedResult.success) {
-      next(parsedResult.error);
-    }
-
-    // sanitizing the data
-    req.body = parsedResult.data;
-
-    next();
-  },
+  validateRequest(createDoctorZodSchema),
   UserController.createDoctor,
 );
 
